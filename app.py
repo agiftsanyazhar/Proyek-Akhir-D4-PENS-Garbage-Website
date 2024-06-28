@@ -38,12 +38,10 @@ preproc_option = st.sidebar.selectbox(
 # Load the appropriate model based on preprocessing option
 if preproc_option == "With Preprocessing":
     # model = load_model("garbage_with_preprocessing_model.h5")
-    # model = load_model("people_garbage_with_preprocessing_model.h5")
-    model = load_model("people_garbage_with_preprocessing_norm_model.h5")
+    model = load_model("people_garbage_with_preprocessing_model.h5")
 else:
     # model = load_model("garbage_without_preprocessing_model.h5")
-    # model = load_model("people_garbage_without_preprocessing_model.h5")
-    model = load_model("people_garbage_without_preprocessing_norm_model.h5")
+    model = load_model("people_garbage_without_preprocessing_model.h5")
 
 
 def grayscale(img):
