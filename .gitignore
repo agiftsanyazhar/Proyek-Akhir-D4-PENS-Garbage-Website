@@ -1,6 +1,6 @@
 .venv/
 footage/
-uploads/*
-!uploads/dummy.txt
 output/*
 !output/dummy.txt
+uploads/*
+!uploads/dummy.txt
