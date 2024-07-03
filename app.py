@@ -30,12 +30,13 @@ option = st.sidebar.selectbox(
 model = YOLO("garbage.pt")
 
 # Define class names (adjust as per your dataset)
-classNames = ["Plastic", "Person"]
+classNames = ["Others", "Plastic", "Straw"]
 
 # Define colors for each class (adjust as needed)
 class_colors = {
-    "Plastic": (255, 0, 0),
-    "Person": (255, 0, 255),
+    "Others": (255, 0, 0),
+    "Plastic": (0, 255, 0),
+    "Straw": (0, 0, 255),
 }
 
 
