@@ -169,9 +169,7 @@ if option == "Detect from Image File":
             processed_frame = processFrame(frame, preproc_option)
 
             # Save and display processed image
-            output_image_path = os.path.join(
-                "output", f"{uploaded_image.name}"
-            )
+            output_image_path = os.path.join("output", f"{uploaded_image.name}")
             cv2.imwrite(output_image_path, processed_frame)
 
             st.success("Image processing completed")

@@ -4,13 +4,13 @@ import numpy as np
 import streamlit as st
 import time
 import math
+from tensorflow.keras.models import load_model
 from ultralytics import YOLO
 
 # Constants
 frame_width = 1280
 frame_height = 720
 font = cv2.FONT_HERSHEY_SIMPLEX
-threshold = 0.00
 
 # Streamlit UI
 st.title("Application for Detecting Littering Actions using YOLO")
@@ -29,14 +29,15 @@ option = st.sidebar.selectbox(
 
 model = YOLO("garbage.pt")
 
-# Define class names (adjust as per your dataset)
-classNames = ["Others", "Plastic", "Straw"]
+# Define class names
+classNames = ["Others", "Plastic", "Straw", "Paper"]
 
 # Define colors for each class (adjust as needed)
 class_colors = {
     "Others": (255, 0, 0),
-    "Plastic": (0, 255, 0),
-    "Straw": (0, 0, 255),
+    "Plastic": (255, 0, 128),
+    "Straw": (255, 0, 255),
+    "Paper": (179, 0, 255),
 }
 
 
@@ -100,9 +101,7 @@ if option == "Detect from Image File":
             processed_frame = processFrame(frame)
 
             # Save and display processed image
-            output_image_path = os.path.join(
-                "output", f"{uploaded_image.name}"
-            )
+            output_image_path = os.path.join("output", f"{uploaded_image.name}")
             cv2.imwrite(output_image_path, processed_frame)
 
             st.success("Image processing completed")
