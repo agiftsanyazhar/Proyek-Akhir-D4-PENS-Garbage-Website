@@ -1,0 +1,1 @@
+All uploaded files will be stored in this folder and deleted after all processes have been successfully executed
