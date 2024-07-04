@@ -170,7 +170,7 @@ if option == "Detect from Image File":
 
             # Save and display processed image
             output_image_path = os.path.join(
-                "output", f"processed_{uploaded_image.name}"
+                "output", f"{uploaded_image.name}"
             )
             cv2.imwrite(output_image_path, processed_frame)
 
@@ -193,7 +193,7 @@ if option == "Detect from Image File":
                 st.download_button(
                     label="Download Image",
                     data=cnn_data,
-                    file_name=f"processed_{uploaded_image.name}",
+                    file_name=f"{uploaded_image.name}",
                     mime="image/jpeg",
                     help="Click to download the processed image",
                 )
