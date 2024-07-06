@@ -4,7 +4,6 @@ import numpy as np
 import streamlit as st
 import time
 import math
-from tensorflow.keras.models import load_model
 from ultralytics import YOLO
 
 # Constants

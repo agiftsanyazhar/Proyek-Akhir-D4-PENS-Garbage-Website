@@ -25,7 +25,22 @@ option = st.sidebar.selectbox(
     ],
 )
 
-model = load_model("people_garbage_with_preprocessing_model.h5")
+# Option to choose with or without preprocessing
+preproc_option = st.sidebar.selectbox(
+    "Choose preprocessing option",
+    [
+        "With Preprocessing",
+        "Without Preprocessing",
+    ],
+)
+
+# Load the appropriate model based on preprocessing option
+if preproc_option == "With Preprocessing":
+    # model = load_model("garbage_with_preprocessing_model.h5")
+    model = load_model("people_garbage_with_preprocessing_model.h5")
+else:
+    # model = load_model("garbage_without_preprocessing_model.h5")
+    model = load_model("people_garbage_without_preprocessing_model.h5")
 
 
 def grayscale(img):
@@ -38,10 +53,11 @@ def equalize(img):
     return img
 
 
-def preprocessing(img):
-    img = grayscale(img)
-    img = equalize(img)
-    img = img.reshape(72, 128, 1)  # Reshape to include one channel
+def preprocessing(img, preproc):
+    if preproc == "With Preprocessing":
+        img = grayscale(img)
+        img = equalize(img)
+        img = img.reshape(72, 128, 1)  # Reshape to include one channel
     img = img / 255.0
     return img
 
@@ -54,10 +70,16 @@ def getClassName(class_no):
     return classes[class_no]
 
 
-def processFrame(frame):
-    img = cv2.resize(frame, (72, 128))
-    img = preprocessing(img)
-    img = img.reshape(1, 72, 128, 1)
+def processFrame(frame, preproc):
+    # img = cv2.resize(frame, (128, 128))  # Garbage
+    img = cv2.resize(frame, (72, 128))  # People Garbage
+    img = preprocessing(img, preproc)
+    if preproc == "With Preprocessing":
+        # img = img.reshape(1, 128, 128, 1)  # Garbage With preprocessing
+        img = img.reshape(1, 72, 128, 1)  # People Garbage With preprocessing
+    else:
+        # img = img.reshape(1, 128, 128, 3)  # Garbage Without preprocessing
+        img = img.reshape(1, 72, 128, 3)  # People Garbage Without preprocessing
 
     predictions = model.predict(img)
     class_index = np.argmax(predictions)
@@ -142,7 +164,7 @@ if option == "Detect from Image File":
             frame_height = frame.shape[0]
 
             st.warning("Processing detection...")
-            processed_frame = processFrame(frame)
+            processed_frame = processFrame(frame, preproc_option)
 
             # Save and display processed image
             output_image_path = os.path.join("output", f"{uploaded_image.name}")
@@ -196,7 +218,13 @@ elif option == "Detect from Video File":
             frame_height = int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
             total_frames = int(cap.get(cv2.CAP_PROP_FRAME_COUNT))
 
-            output_filename = os.path.splitext(uploaded_video.name)[0] + ".mp4"
+            # Determine preprocessing status
+            preproc_suffix = (
+                "_preproc" if preproc_option == "With Preprocessing" else "_nopreproc"
+            )
+            output_filename = (
+                os.path.splitext(uploaded_video.name)[0] + preproc_suffix + ".mp4"
+            )
             out_path = os.path.join("output", output_filename)
 
             out = cv2.VideoWriter(
@@ -216,7 +244,7 @@ elif option == "Detect from Video File":
                 frame_count += 1
                 print(f"Processing frame {frame_count}/{total_frames}")
                 st.text(f"Processing frame {frame_count}/{total_frames}")
-                frame = processFrame(frame)
+                frame = processFrame(frame, preproc_option)
                 out.write(frame)
 
             cap.release()
@@ -258,7 +286,7 @@ elif option == "Open Webcam":
             if not success:
                 break
 
-            frame = processFrame(frame)
+            frame = processFrame(frame, preproc_option)
 
             cv2.imshow("Webcam", frame)
 
