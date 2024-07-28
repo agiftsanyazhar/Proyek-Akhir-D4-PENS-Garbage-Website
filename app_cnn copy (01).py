@@ -1,3 +1,7 @@
+# =========================
+# Python 3.10.11
+# =========================
+
 import os
 import cv2
 import numpy as np
