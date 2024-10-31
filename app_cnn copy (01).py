@@ -171,7 +171,10 @@ if option == "Detect from Image File":
             processed_frame = processFrame(frame, preproc_option)
 
             # Save and display processed image
-            output_image_path = os.path.join("output", f"{uploaded_image.name}")
+            output_dir = "output"
+            if not os.path.exists(output_dir):
+                os.makedirs(output_dir)
+            output_image_path = os.path.join(output_dir, uploaded_image.name)
             cv2.imwrite(output_image_path, processed_frame)
 
             st.success("Image processing completed")
@@ -208,6 +211,8 @@ elif option == "Detect from Video File":
 
     if uploaded_video is not None:
         uploads_dir = os.path.join("uploads")
+        if not os.path.exists(uploads_dir):
+            os.makedirs(uploads_dir)
         video_path = os.path.join(uploads_dir, uploaded_video.name)
 
         with open(video_path, "wb") as f:
@@ -229,7 +234,10 @@ elif option == "Detect from Video File":
             output_filename = (
                 os.path.splitext(uploaded_video.name)[0] + preproc_suffix + ".mp4"
             )
-            out_path = os.path.join("output", output_filename)
+            out_dir = "output"
+            if not os.path.isdir(out_dir):
+                os.makedirs(out_dir)
+            out_path = os.path.join(out_dir, output_filename)
 
             out = cv2.VideoWriter(
                 out_path,
